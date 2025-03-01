@@ -1,0 +1,21 @@
+pyserial
+
+# Development
+pytest
+mypy
+black
+vulture
+ruff
+rich
+pylint
+ruff
+
+# Creating documentation
+sphinx
+sphinx_click
+# furo
+# myst_parser
+
+# Creating an installer
+pyinstaller
+nuitka

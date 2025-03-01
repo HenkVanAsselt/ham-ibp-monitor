@@ -1,0 +1,4 @@
+pyserial
+click
+rich
+pyside6
