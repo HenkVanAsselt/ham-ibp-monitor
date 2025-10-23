@@ -1,7 +1,7 @@
 """ Based on current time, calculate which cycle we are in.
 """
 
-# pylint: disable=invalid-name,logging-fstring-interpolation
+# pylint: disable=unnecessary-ellipsis,logging-fstring-interpolation,
 
 import logging
 import math
@@ -54,8 +54,8 @@ def print_beacon_on_freq(freq: [int | str]) -> None:  # type: ignore
     slot = math.floor(seconds / 10)
     logging.debug(f"{cycle=} {seconds=} {slot=}\n")
 
-    if not param.beacons:
-        param.beacons = beacons.get_dict_of_beacons()
+    if not beacons.dict_of_beacons:
+        beacons.dict_of_beacons = beacons.get_dict_of_beacons()
 
     # Show current list of transmitting beacons.
 
@@ -78,7 +78,7 @@ def print_beacon_on_freq(freq: [int | str]) -> None:  # type: ignore
     if n < 0:
         n += 18
 
-    print(f"{freq} MHz: {param.beacons[n]}")
+    print(f"{freq} MHz: {beacons.dict_of_beacons[n]}")
 
 
 # -----------------------------------------------------------------------------

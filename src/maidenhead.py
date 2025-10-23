@@ -1,14 +1,13 @@
 """ Maidenhead calculations (distance and bearing)
+
+Calculate distance between 2 maidenhead locations.
+Origin: https://wa5znu.org/2007/08/bearing/
+Leigh L. Klotz, Jr.
+WA5ZNU
 """
 
-""" Calculate distance between 2 maidenhead locations."""
-
-# Leigh L. Klotz, Jr.
-# WA5ZNU
-# Origin: https://wa5znu.org/2007/08/bearing/
-
-import logging
 import sys
+import logging
 from math import sin, cos, atan2, pi, sqrt
 
 RADIUS = 6367000.0

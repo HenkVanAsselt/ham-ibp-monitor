@@ -29,7 +29,6 @@ rem echo make apidoc        Generate sphinx api documentation
 echo make doxygen       Make doxygen documentation
 echo.
 echo make installer      make full installation (py2exe and nsis installer)
-echo make doxygen        make doxygen documentation
 echo.
 goto _eof
 

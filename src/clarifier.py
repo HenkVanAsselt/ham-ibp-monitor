@@ -8,9 +8,9 @@
 import click
 
 # local imports
-import cat
-import param
-import transceiver
+from src import cat
+from src import param
+from src import transceiver
 
 
 # -----------------------------------------------------------------------------

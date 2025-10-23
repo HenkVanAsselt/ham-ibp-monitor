@@ -33,4 +33,4 @@ beacon_frequency = {
     28: 28.200,  # 10 meter = 28 MHz
 }
 
-beacons = {}
+

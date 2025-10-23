@@ -7,6 +7,7 @@ import sys
 import signal
 import time
 import logging
+# from pathlib import Path
 
 # 3rd party imports
 import click
@@ -20,6 +21,8 @@ from src import beacons
 from src import cycle_calculator
 from src import frequency
 from src import transceiver
+
+from src.lib.helper import debug, clear_debug_window
 
 console = Console()
 
@@ -88,9 +91,27 @@ def show(band, tune) -> None:
                     color = "[bold red]"
                 else:
                     color = "[bold blue]"
-            beacon = param.beacons[current_slot]
+
+            debug(f"{current_slot=}")
+            beacon = beacons.dict_of_beacons[current_slot]
             status.update(f"{color} {beacon}")
             time.sleep(0.25)  # or do some more work
+
+
+# ------------------------------------------------------------------------
+#
+# ------------------------------------------------------------------------
+def main():
+
+    configfile = 'beacons.ini'
+    beacons_ini = beacons.find_ini_file(configfile)
+    if beacons_ini is None:
+        print(f"ERROR: Could not find a file named {configfile}")
+        sys.exit(0)
+    debug(f"Found {beacons_ini}")
+
+    beacons.dict_of_beacons = beacons.get_dict_of_beacons(beacons_ini)
+    show()
 
 
 # -----------------------------------------------------------------------------
@@ -99,6 +120,7 @@ def show(band, tune) -> None:
 # pylint: disable=no-value-for-parameter
 if __name__ == "__main__":
 
+    clear_debug_window()
     logging.basicConfig(level=logging.DEBUG)
-    beacons.get_dict_of_beacons()
-    show()
+    main()
+

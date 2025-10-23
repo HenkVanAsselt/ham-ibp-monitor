@@ -1,4 +1,9 @@
 pyserial
+click
+pydantic
+pyyaml
+pyside6
+
 
 # Development
 pytest
@@ -13,8 +18,6 @@ ruff
 # Creating documentation
 sphinx
 sphinx_click
-# furo
-# myst_parser
 
 # Creating an installer
 pyinstaller

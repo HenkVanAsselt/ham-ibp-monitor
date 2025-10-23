@@ -4,12 +4,14 @@
 # pylint: disable=logging-fstring-interpolation, line-too-long
 
 # Global imports
+import sys
 from configparser import ConfigParser
 from dataclasses import dataclass
 import logging
+from pathlib import Path
 
 # Local imports
-from src import param
+from src.lib.helper import debug, clear_debug_window
 
 
 # -----------------------------------------------------------------------------
@@ -26,10 +28,59 @@ class Beacon:
     grid_locator: str
 
 
+dict_of_beacons: dict[int, Beacon] = {}
+
+
+# ------------------------------------------------------------------------
+#
+# ------------------------------------------------------------------------
+def find_config_folder(foldername: str = 'config') -> Path | None:
+    """Find the folder named 'config', searching up and down the current folder
+    """
+
+    current_dir = Path.cwd()
+
+    # Search upwards (parent directories)
+    for parent in current_dir.parents:
+        config_path = parent / foldername
+        if config_path.is_dir():
+            return config_path
+
+    # Search downwards (subdirectories)
+    for child in current_dir.glob(f'**/foldername'):
+        if child.is_dir():
+            return child
+
+    return None  # Return None if the 'config' folder is not found
+
+
+# ------------------------------------------------------------------------
+#
+# ------------------------------------------------------------------------
+def find_ini_file(filename: str) -> Path | None:
+    """Find the given configuration file in parent folders or in subfolders """
+
+    current_dir = Path.cwd()
+
+    # Search in the current directory and go up and down from there
+    # Check upwards first
+    for parent in current_dir.parents:
+        search_path = parent / filename
+        if search_path.exists():
+            return search_path
+
+    # If not found in higher directories, check in lower (sub) directories
+    for child in current_dir.glob(f'**/{filename}'):
+        if child.exists():
+            return child
+
+    return None  # Return None if not found
+
+
 # -----------------------------------------------------------------------------
 #
 # -----------------------------------------------------------------------------
-def get_dict_of_beacons(configfile: str = "./config/config.ini") -> dict[int, Beacon]:
+def get_dict_of_beacons(configfile: Path) -> dict[int, Beacon]:
     """Read the configfile with beacon information
 
     :return: dictionary of beacons (number and name)
@@ -60,6 +111,9 @@ def get_dict_of_beacons(configfile: str = "./config/config.ini") -> dict[int, Be
 
     """
 
+    if not configfile:
+        return {}
+
     beacons_ini = ConfigParser()
     beacons_ini.read(configfile)
 
@@ -78,7 +132,6 @@ def get_dict_of_beacons(configfile: str = "./config/config.ini") -> dict[int, Be
         beacon_dict[slot] = b
 
     logging.debug(f"{beacon_dict=}")
-    param.beacons = beacon_dict
     return beacon_dict
 
 
@@ -110,7 +163,14 @@ def main() -> None:
     :return: Nothing
     """
 
-    beacons = get_dict_of_beacons("./config/config.ini")
+    configfile = 'beacons.ini'
+    beacons_ini = find_ini_file(configfile)
+    if beacons_ini is None:
+        print(f"ERROR: Could not find a file named {configfile}")
+        sys.exit(0)
+    debug(f"Found {beacons_ini}")
+
+    beacons = get_dict_of_beacons(beacons_ini)
     show_beacons(beacons)
 
 
@@ -118,4 +178,5 @@ def main() -> None:
 #
 # ----------------------------------------------------------------------------
 if __name__ == "__main__":
+    clear_debug_window()
     main()
