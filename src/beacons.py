@@ -1,5 +1,4 @@
-""" Read and process the file config/Beacons.lst
-"""
+"""Read and process the file config/Beacons.lst"""
 
 # pylint: disable=logging-fstring-interpolation, line-too-long
 
@@ -11,7 +10,7 @@ import logging
 from pathlib import Path
 
 # Local imports
-from src.lib.helper import debug, clear_debug_window
+from lib.helper import debug, clear_debug_window
 
 
 # -----------------------------------------------------------------------------
@@ -19,8 +18,8 @@ from src.lib.helper import debug, clear_debug_window
 # -----------------------------------------------------------------------------
 @dataclass
 class Beacon:
-    """ Dataclass to store beacon information in.
-    """
+    """Dataclass to store beacon information in."""
+
     slot: int
     callsign: str
     dx_entity: str
@@ -34,9 +33,8 @@ dict_of_beacons: dict[int, Beacon] = {}
 # ------------------------------------------------------------------------
 #
 # ------------------------------------------------------------------------
-def find_config_folder(foldername: str = 'config') -> Path | None:
-    """Find the folder named 'config', searching up and down the current folder
-    """
+def find_config_folder(foldername: str = "config") -> Path | None:
+    """Find the folder named 'config', searching up and down the current folder"""
 
     current_dir = Path.cwd()
 
@@ -47,7 +45,7 @@ def find_config_folder(foldername: str = 'config') -> Path | None:
             return config_path
 
     # Search downwards (subdirectories)
-    for child in current_dir.glob(f'**/foldername'):
+    for child in current_dir.glob(f"**/foldername"):
         if child.is_dir():
             return child
 
@@ -58,7 +56,7 @@ def find_config_folder(foldername: str = 'config') -> Path | None:
 #
 # ------------------------------------------------------------------------
 def find_ini_file(filename: str) -> Path | None:
-    """Find the given configuration file in parent folders or in subfolders """
+    """Find the given configuration file in parent folders or in subfolders"""
 
     current_dir = Path.cwd()
 
@@ -70,7 +68,7 @@ def find_ini_file(filename: str) -> Path | None:
             return search_path
 
     # If not found in higher directories, check in lower (sub) directories
-    for child in current_dir.glob(f'**/{filename}'):
+    for child in current_dir.glob(f"**/{filename}"):
         if child.exists():
             return child
 
@@ -139,7 +137,7 @@ def get_dict_of_beacons(configfile: Path) -> dict[int, Beacon]:
 #
 # -----------------------------------------------------------------------------
 def show_beacons(beacons: dict[int, Beacon]) -> None:
-    """ Print the list of beacons.
+    """Print the list of beacons.
 
     :param beacons: dictionary of beacons
     """
@@ -158,12 +156,12 @@ def show_beacons(beacons: dict[int, Beacon]) -> None:
 #
 # ----------------------------------------------------------------------------
 def main() -> None:
-    """ main function
+    """main function
 
     :return: Nothing
     """
 
-    configfile = 'beacons.ini'
+    configfile = "beacons.ini"
     beacons_ini = find_ini_file(configfile)
     if beacons_ini is None:
         print(f"ERROR: Could not find a file named {configfile}")

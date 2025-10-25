@@ -1,10 +1,16 @@
-""" Maidenhead calculations (distance and bearing)
+"""Maidenhead calculations (distance and bearing)
+
+.. topic::  What is a QRA/Medenhead locator?
+
+    A Maidenhead locator compresses the latitude and longitude of a position into a short string of characters.
+    For example, the location of Caracas, Venezuela is encoded as JO22lm.
 
 Calculate distance between 2 maidenhead locations.
 Origin: https://wa5znu.org/2007/08/bearing/
 Leigh L. Klotz, Jr.
 WA5ZNU
 """
+
 
 import sys
 import logging
@@ -19,7 +25,7 @@ offset = 0
 # -----------------------------------------------------------------------------
 #
 # -----------------------------------------------------------------------------
-def latlon(qra: str) -> tuple[float, float]:
+def qra_to_latlon(qra: str) -> tuple[float, float]:
     """Convert the given maidenhead locator to lat and long
 
     :param qra: The maidenhead locator
@@ -45,7 +51,7 @@ def latlon(qra: str) -> tuple[float, float]:
 #
 # -----------------------------------------------------------------------------
 def latlon_distance(lat1r: float, lon1r: float, lat2r: float, lon2r: float) -> int:
-    """ Calculate the distance between 2 lat/lon locations.
+    """Calculate the distance between 2 lat/lon locations.
 
     :param lat1r: position 1 lattitude
     :param lon1r: position 1 longitude
@@ -90,10 +96,10 @@ def maidenhead_distance(loc1: str, loc2: str) -> int:
     0
     """
 
-    (lat1, lon1) = latlon(loc1)
+    (lat1, lon1) = qra_to_latlon(loc1)
     logging.debug(f"{loc1=}, {lat1=}, {lon1=}")
 
-    (lat2, lon2) = latlon(loc2)
+    (lat2, lon2) = qra_to_latlon(loc2)
     logging.debug(f"{loc2=}, {lat2=}, {lon2=}")
 
     k = 180.0 / pi
@@ -112,7 +118,7 @@ def maidenhead_distance(loc1: str, loc2: str) -> int:
 #
 # -----------------------------------------------------------------------------
 def latlon_bearing(lat1r: float, lon1r: float, lat2r: float, lon2r: float) -> int:
-    """ Calculate the bearing between 2 lat/lon locations
+    """Calculate the bearing between 2 lat/lon locations
 
     :param lat1r: position 1 lattitude
     :param lon1r: position 1 longitude
@@ -145,7 +151,7 @@ def latlon_bearing(lat1r: float, lon1r: float, lat2r: float, lon2r: float) -> in
 #
 # -----------------------------------------------------------------------------
 def maidenhead_bearing(loc1: str, loc2: str) -> int:
-    """ Calculate bearing from maidenhead location to maidenhead location.
+    """Calculate bearing from maidenhead location to maidenhead location.
 
     :param loc1: Location 1
     :param loc2: Location 2
@@ -163,10 +169,10 @@ def maidenhead_bearing(loc1: str, loc2: str) -> int:
 
     """
 
-    (lat1, lon1) = latlon(loc1)
+    (lat1, lon1) = qra_to_latlon(loc1)
     logging.debug(f"{loc1=}, {lat1=}, {lon1=}")
 
-    (lat2, lon2) = latlon(loc2)
+    (lat2, lon2) = qra_to_latlon(loc2)
     logging.debug(f"{loc2=}, {lat2=}, {lon2=}")
 
     k = 180.0 / pi
@@ -190,11 +196,11 @@ def main() -> None:
 
     # Set your QRA here
     own_locator = "JO22lm"
-    (lat1, lon1) = latlon(own_locator)
+    (lat1, lon1) = qra_to_latlon(own_locator)
     logging.debug(f"{own_locator=}, {lat1=}, {lon1=}")
 
     other_locator = sys.argv[1]
-    (lat2, lon2) = latlon(other_locator)
+    (lat2, lon2) = qra_to_latlon(other_locator)
     logging.debug(f"{other_locator=}, {lat2=}, {lon2=}")
 
     # k = 180.0 / pi

@@ -1,5 +1,4 @@
-""" Transceiver (Yeasu FTdx10) related functions
-"""
+"""Transceiver (Yeasu FTdx10) related functions"""
 
 # pylint: disable=logging-fstring-interpolation,invalid-name
 
@@ -12,14 +11,14 @@ import logging
 import serial  # type: ignore
 
 # local imports
-from src import param
-from src import cat
+import param
+import cat
 
 logging.basicConfig(level=logging.INFO)
 
 
 def offset_to_str(offset) -> tuple:  # type: ignore
-    """ Convert the given offset (int or str) to a string.
+    """Convert the given offset (int or str) to a string.
 
     :param offset: Frequency offset (int or str)
     :return: tuple of direction ('+' or '-') and 4-char zero padded string.
@@ -47,23 +46,25 @@ def offset_to_str(offset) -> tuple:  # type: ignore
 
     """
 
-    off = "0000"        # Default offset
-    direction = '+'     # Default direction
+    off = "0000"  # Default offset
+    direction = "+"  # Default direction
 
     if isinstance(offset, int):
         if offset > 9999 or offset < -9999:
-            logging.error(f"Invalid offset {offset}. Must be between -9999 Hz and +9999 Hz")
-            return '+', '0000'
+            logging.error(
+                f"Invalid offset {offset}. Must be between -9999 Hz and +9999 Hz"
+            )
+            return "+", "0000"
         if offset < 0:
-            direction = '-'
+            direction = "-"
             offset = -offset
         off = f"{int(offset):04}"
 
     if isinstance(offset, str):
         if offset.startswith("+"):
             offset = offset[1:]
-        elif offset.startswith('-'):
-            direction = '-'
+        elif offset.startswith("-"):
+            direction = "-"
             offset = offset[1:]
         off = f"{int(offset):04}"
 
@@ -75,8 +76,9 @@ def offset_to_str(offset) -> tuple:  # type: ignore
 # -----------------------------------------------------------------------------
 def show_information() -> None:
     """Get current information from the connected tranceiver
+    """
 
-
+    """
     1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
     I  F  P1 P1 P1 P2 P2 P2 P2 P2 P2 P2 P2 P2 P3 P3 P3 P3 P3 P4 P5 P6 P7 P8 P9 P9 P10 ;
 
@@ -169,13 +171,16 @@ def set_vfo(frequency: [str | float], vfo: str = "A") -> bool:  # type: ignore
 
     :param frequency: Frequency to use
     :param vfo: VFO to use ("A" or "B")
+    :return: True on success, False if an error
+    """
+
+    """
 
     Frequency can be:
     * a string with length 9  (for example "014100000")
     * a float. Assumed to be in MHz. Will be converted to a bytearray and 0 padded
       (for example 14.1)
 
-    :return: True on success, False if an error
 
     """
 
@@ -226,20 +231,20 @@ def metervalue_type(valstr: str) -> str:
     """
 
     valtype_dict = {
-        '1': 'S',
-        '2': '-',
-        '3': 'COMP',
-        '4': 'ALC',
-        '5': 'PO',
-        '6': 'SWR',
-        '7': 'IDD',
-        '8': 'VDD',
-        '9': '-',
+        "1": "S",
+        "2": "-",
+        "3": "COMP",
+        "4": "ALC",
+        "5": "PO",
+        "6": "SWR",
+        "7": "IDD",
+        "8": "VDD",
+        "9": "-",
     }
 
     x = valstr[2:3]
     # print(x)
-    t = valtype_dict.get(x, '')
+    t = valtype_dict.get(x, "")
     # print(t)
     return t
 
@@ -350,7 +355,7 @@ def scan_beacon_frequencies(port: serial.Serial, delay: float = 2.0) -> None:
 # -----------------------------------------------------------------------------
 # noinspection PyPep8Naming
 def set_mode(mode_str: str) -> bool:
-    """ Set the main band mode to the given string (i.e. 'USB', 'LSB', 'CW')
+    """Set the main band mode to the given string (i.e. 'USB', 'LSB', 'CW')
 
     :param mode_str: String representing the desired mode
     """
@@ -378,7 +383,7 @@ def set_mode(mode_str: str) -> bool:
 # noinspection PyPep8Naming,PyUnusedLocal
 # pylint: disable=unused-variable
 def reset_clarifiers() -> bool:
-    """ Reset RX and TX clarifiers to OFF with an offset of 000 Hz"""
+    """Reset RX and TX clarifiers to OFF with an offset of 000 Hz"""
 
     MAIN_BAND = "0"
     SUB_BAND = "1"
@@ -415,7 +420,7 @@ def reset_clarifiers() -> bool:
 # -----------------------------------------------------------------------------
 # noinspection PyUnusedLocal,PyPep8Naming
 def set_clarifier(rx_offset: [str | int]) -> bool:  # type: ignore
-    """ Set TX and/or RX clarifiers.
+    """Set TX and/or RX clarifiers.
 
     :param rx_offset: The offset in Hz (positive or negative).
 
@@ -447,12 +452,21 @@ def set_clarifier(rx_offset: [str | int]) -> bool:  # type: ignore
 
     # Set the RX Clarifier frequency
     #            P1          P2      P3               P4    P5...P8
-    cmd = 'CF' + MAIN_BAND + FIXED + CLAR_FREQUENCY + rx_direction + rx_offset + ";"
+    cmd = "CF" + MAIN_BAND + FIXED + CLAR_FREQUENCY + rx_direction + rx_offset + ";"
     cat.write(cmd)
 
     # Turn the RX Clarifier on or off
     #            P1          P2      P3             P4        P5        P6...P8
-    cmd = 'CF' + MAIN_BAND + FIXED + CLAR_SETTING + rx_clar_onoff + TX_CLAR_OFF + 3 * FIXED + ";"
+    cmd = (
+        "CF"
+        + MAIN_BAND
+        + FIXED
+        + CLAR_SETTING
+        + rx_clar_onoff
+        + TX_CLAR_OFF
+        + 3 * FIXED
+        + ";"
+    )
     cat.write(cmd)
 
     return True
@@ -462,7 +476,7 @@ def set_clarifier(rx_offset: [str | int]) -> bool:  # type: ignore
 #
 # -----------------------------------------------------------------------------
 def main() -> None:
-    """ main entry point."""
+    """main entry point."""
 
     # cat.show_serial_ports()
 

@@ -1,5 +1,4 @@
-""" Determine available serial ports and determine which one if for the CAT interface.
-"""
+"""Determine available serial ports and determine which one if for the CAT interface."""
 
 # pylint: disable=invalid-name, logging-fstring-interpolation
 
@@ -7,19 +6,20 @@ import sys
 import logging
 
 # 3rd party imports
-import serial                                   # type: ignore
-from serial.tools.list_ports import comports    # type: ignore
+import serial  # type: ignore
+from serial.tools.list_ports import comports  # type: ignore
 
 # local imports
-from src import param
+import param
 
 logging.basicConfig(level=logging.INFO)
+
 
 # ----------------------------------------------------------------------------
 #
 # ----------------------------------------------------------------------------
 def show_serial_ports() -> None:
-    """ Show the avaialble serial ports
+    """Show the avaialble serial ports
 
     :return: Nothing
     """
@@ -28,7 +28,9 @@ def show_serial_ports() -> None:
 
     # Show the ports
     for n, (port, desc, _hwid) in enumerate(sorted(comports()), 1):
-        sys.stderr.write("--- {:2}: {:20} {!r}\n".format(n, port, desc))        # pylint:disable=consider-using-f-string
+        sys.stderr.write(
+            "--- {:2}: {:20} {!r}\n".format(n, port, desc)
+        )  # pylint:disable=consider-using-f-string
 
 
 # ----------------------------------------------------------------------------
@@ -52,7 +54,7 @@ def get_cat_port() -> str:
 #
 # -----------------------------------------------------------------------------
 def open_cat_port(cat_port: str = "") -> serial.Serial:
-    """ Open the serial CAT port
+    """Open the serial CAT port
 
     :param cat_port: If given, use this port (for example 'COM6:')
                      If no port is given, determine it now.
@@ -78,7 +80,7 @@ def open_cat_port(cat_port: str = "") -> serial.Serial:
 #
 # -----------------------------------------------------------------------------
 def write(cmd: str | bytes) -> str:
-    """ Write the given command to the CAT port
+    """Write the given command to the CAT port
 
     :param cmd: The command (string or bytearray) to send
     :returns: Response (if any)
@@ -94,7 +96,7 @@ def write(cmd: str | bytes) -> str:
         # Add the termination character if neccessary
         if not cmd.endswith(";"):
             cmd += ";"
-        b = cmd.encode('utf-8')
+        b = cmd.encode("utf-8")
     elif isinstance(cmd, bytes):
         # Add the termination character if neccessary
         if not cmd.endswith(b";"):
@@ -111,17 +113,17 @@ def write(cmd: str | bytes) -> str:
     response = param.port.read_until(expected=";")
     if response:
         logging.debug(f"{response=}")
-        ret: str = response.decode('utf-8')
+        ret: str = response.decode("utf-8")
         return ret
 
-    return ""       # Default is an empty string
+    return ""  # Default is an empty string
 
 
 # -----------------------------------------------------------------------------
 #
 # -----------------------------------------------------------------------------
 def main() -> None:
-    """ Show all serial ports, then determine and show the CAT port
+    """Show all serial ports, then determine and show the CAT port
 
     :return: Nothing
     """

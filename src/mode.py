@@ -1,5 +1,4 @@
-""" Commandline interface to set the TRX to a specific mode. """
-
+"""Commandline interface to set the TRX to a specific mode."""
 
 # Global imports
 
@@ -7,9 +6,9 @@
 import click
 
 # local imports
-from src import param
-from src import cat
-from src import transceiver
+import param
+import cat
+import transceiver
 
 
 # -----------------------------------------------------------------------------
@@ -17,7 +16,6 @@ from src import transceiver
 # -----------------------------------------------------------------------------
 @click.command()
 @click.option("--mode", prompt="Mode", help="Set mode")
-
 def set_mode(mode: str) -> None:
     """Set the TRX to the given mode."""
 
@@ -26,7 +24,7 @@ def set_mode(mode: str) -> None:
 
     if mode not in param.mode_dict.values():
         print(f"Error: Unknown mode {mode}")
-        valid_modes = ', '.join(param.mode_dict.values())
+        valid_modes = ", ".join(param.mode_dict.values())
         print(f"Valid modes are {valid_modes}")
         return
 

@@ -1,1 +1,3 @@
-python -m src.show_beacons
+pushd src
+python show_beacons.py
+popd

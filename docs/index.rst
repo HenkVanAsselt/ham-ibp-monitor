@@ -9,7 +9,6 @@ HAM Beacon Monitor documentation
 
    intro
 
-   _modules/modules
 
 Indices and tables
 ==================
@@ -22,16 +21,7 @@ Indices and tables
 API Reference
 =============
 
-.. autosummary::
-   :toctree: _autosummary
+.. toctree::
+   autodoc/index.rst
 
-   beacons
-   cat
-   clarifier
-   console
-   cycle_calculator
-   frequency
-   mode
-   params
-   transceiver
 

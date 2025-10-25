@@ -1,5 +1,4 @@
-""" Commandline interface to set the RX and TX clarifiers. """
-
+"""Commandline interface to set the RX and TX clarifiers."""
 
 # Global imports
 # import sys
@@ -8,17 +7,19 @@
 import click
 
 # local imports
-from src import cat
-from src import param
-from src import transceiver
+import cat
+import param
+import transceiver
 
 
 # -----------------------------------------------------------------------------
 #
 # -----------------------------------------------------------------------------
 @click.command()
-@click.option("--rx", help="RX Clarifier offset", default='0000')
-@click.option("--reset", is_flag=True, help="Reset TX and RX clarifiers to default settings")
+@click.option("--rx", help="RX Clarifier offset", default="0000")
+@click.option(
+    "--reset", is_flag=True, help="Reset TX and RX clarifiers to default settings"
+)
 def set_clarifier(rx, reset) -> None:  # type: ignore
     """Set the TRX to the given frequency on the given VFO"""
 

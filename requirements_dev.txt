@@ -18,6 +18,7 @@ ruff
 # Creating documentation
 sphinx
 sphinx_click
+furo
 
 # Creating an installer
 pyinstaller

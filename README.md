@@ -58,7 +58,7 @@ For an webbased view of wich beacon is transmitting, see https://www.ncdxf.org/b
 
 ## Requirements
 
-- Virtual COM port driver from http://www.yaesu.com
+- Virtual COM port driver from https://www.yaesu.com/product-detail.aspx?Model=FTDX10&CatName=HF%20Transceivers/Amplifiers
 
 After the installation and connection to the tranceiver, you should see 2 ports in the Windows device manager.
 

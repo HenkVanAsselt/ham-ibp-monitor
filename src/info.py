@@ -1,5 +1,4 @@
-""" Get and show the transceiver information
-"""
+"""Get and show the transceiver information"""
 
 import transceiver
 

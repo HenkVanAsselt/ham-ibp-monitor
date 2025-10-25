@@ -1,10 +1,10 @@
-""" Based on current time, calculate which cycle we are in.
-"""
+"""Based on current time, calculate which beacon cycle we are in."""
 
 # pylint: disable=unnecessary-ellipsis,logging-fstring-interpolation,
 
 import logging
 import math
+
 # global imports
 import time
 from typing import Any
@@ -13,9 +13,9 @@ from typing import Any
 from rich.console import Console
 
 # local imports
-from src import beacons
-from src import frequency
-from src import param
+import beacons
+import frequency
+import param
 
 console = Console()
 
@@ -99,15 +99,15 @@ def get_current_slot_on_frequency(freq: Any) -> int:
 
     # Determine current beacon on the given frequency
 
-    if int(freq) == 14:         # 20 meter band
+    if int(freq) == 14:  # 20 meter band
         n = slot
-    elif int(freq) == 18:       # 17 meter band
+    elif int(freq) == 18:  # 17 meter band
         n = slot - 1
-    elif int(freq) == 21:       # 15 meter band
+    elif int(freq) == 21:  # 15 meter band
         n = slot - 2
-    elif int(freq) == 24:       # 12 meter band
+    elif int(freq) == 24:  # 12 meter band
         n = slot - 3
-    elif int(freq) == 28:       # 10 meter band
+    elif int(freq) == 28:  # 10 meter band
         n = slot - 4
     else:
         print(f"Invalid frequency {freq}")

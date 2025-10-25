@@ -1,5 +1,4 @@
-""" Commandline interface to set the TRX to a specific frequency. """
-
+"""Commandline interface to set the TRX to a specific frequency."""
 
 # Global imports
 import logging
@@ -10,16 +9,16 @@ import re
 import click
 
 # local imports
-from src import cat
-from src import param
-from src import transceiver
+import cat
+import param
+import transceiver
 
 
 # -----------------------------------------------------------------------------
 #
 # -----------------------------------------------------------------------------
 def freq_or_meter_to_freq(p: int | float | str) -> int:
-    """ Convert frequency or band to the bottom frequency.
+    """Convert frequency or band to the bottom frequency.
 
     :param p: The input to handle
 
@@ -53,11 +52,11 @@ def freq_or_meter_to_freq(p: int | float | str) -> int:
 
     # Dictionary to convert meters (as integer) to frequency (in MHz)
     m_to_f: dict[int, int] = {
-        20: 14,     # 20 meter = 14 MHz
-        17: 18,     # 17 meter = 18 MHz
-        15: 21,     # 15 meter = 21 MHz
-        12: 24,     # 12 meter = 24 MHz
-        10: 28      # 10 meter = 28 MHz
+        20: 14,  # 20 meter = 14 MHz
+        17: 18,  # 17 meter = 18 MHz
+        15: 21,  # 15 meter = 21 MHz
+        12: 24,  # 12 meter = 24 MHz
+        10: 28,  # 10 meter = 28 MHz
     }
 
     if isinstance(p, int):
