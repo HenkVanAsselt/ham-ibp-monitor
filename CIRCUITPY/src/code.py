@@ -1,20 +1,49 @@
 import sys
 import time
 import math
+import supervisor
+import hva_led
 
+# -----------------------------------------------------------------------------
+# Intialize
+# -----------------------------------------------------------------------------
+
+# hva_led.test_led()
+
+# Intialize the Pimoroni display
+import pimoroni_pico_display
+display, line1, line2, line3, line4, line5, line6 = pimoroni_pico_display.display_layout()
+
+hva_led.set_led_red()
+line1.text = "Initializing"
+
+# Connect to WiFi
+line2.text = "Connecting to WiFi"
 import hva_wifi
-hva_wifi.connect()
-hva_wifi.synctime()
+ret = hva_wifi.connect()
+if ret:
+    line3.text = "Connected"
+else:
+    line3.text = "Failed. Restarting"
+    time.sleep(3.0)
+    supervisor.reload()
+
+# Synchronize time.
+line4.text = "Sync Time"
+ret = hva_wifi.synctime()
+if ret:
+    line5.text = "Done"
+    time.sleep(1.0)
+else:
+    line5.text = "Failed. Restarting"
+    time.sleep(3.0)
+    supervisor.reload()
 
 # At this point, we do not need WiFi anymore
 import gc
 gc.enable()
 del hva_wifi
 gc.collect()
-
-# Intialize the Pimoroni display
-import pimoroni_pico_display
-display, line1, line2, line3, line4, line5, line6 = pimoroni_pico_display.display_layout()
 
 # -----------------------------------------------------------------------------
 #
@@ -45,7 +74,9 @@ def current_cycle(time_tuple) -> tuple[int, int]:
 
     return cycle, seconds_in_cycle
 
-
+# -----------------------------------------------------------------------------
+# The beacons
+# -----------------------------------------------------------------------------
 """
 beacons = {
 0 :  "4U1UN, New York City, United Nations, FN30as",
@@ -91,12 +122,14 @@ beacons = {
 17 : "YV5B,Venezuela",
 }
 
-for nr, info in beacons.items():
-    print(nr, info)
+# for nr, info in beacons.items():
+#     print(nr, info)
 
+previous_slot = 0
 
-
-
+# -----------------------------------------------------------------------------
+# Main loop
+# -----------------------------------------------------------------------------
 while True:
     time_tuple = time.localtime()  # time in seconds since Epoch as 8-tuple
     # print(f"{time_tuple=}")
@@ -104,6 +137,13 @@ while True:
     cycle, secs_in_cycle = current_cycle(time_tuple)
     slot = math.floor(secs_in_cycle / 10)
     # print(f"{cycle=} {secs_in_cycle=} {slot=}")
+
+    # Show a RED LED if a new slot is started
+    if slot != previous_slot:
+        hva_led.set_led_red()
+        previous_slot = slot
+    else:
+        hva_led.set_led_off()
 
     # Show transmitting beacons
     # Compensate for the wrap-around through the list.
